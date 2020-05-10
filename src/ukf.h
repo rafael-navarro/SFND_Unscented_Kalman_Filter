@@ -41,6 +41,15 @@ class UKF {
    */
   void UpdateRadar(MeasurementPackage meas_package);
 
+  /**
+   * Generate sigma points given current state
+   * @param Xsig_out Sigma points matrix
+   */
+
+  void UKF::GenerateSigmaPoints(VectorXd x, MatrixXd P, double lambda, MatrixXd* x_sig_out);
+  void AugmentedSigmaPoints(MatrixXd* x_sig_aug_out);
+  void SigmaPointPrediction(MatrixXd x_sig_aug, double delta_t, MatrixXd* x_sig_out);
+  void PredictMeanAndCovariance(MatrixXd x_sig_pred, double lambda, VectorXd* x_out, MatrixXd* P_out); 
 
   // initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
@@ -56,6 +65,8 @@ class UKF {
 
   // state covariance matrix
   Eigen::MatrixXd P_;
+
+  Eigen::MatrixXd V_;
 
   // predicted sigma points matrix
   Eigen::MatrixXd Xsig_pred_;
@@ -82,13 +93,15 @@ class UKF {
   double std_radphi_;
 
   // Radar measurement noise standard deviation radius change in m/s
-  double std_radrd_ ;
+  double std_radrd_;
 
   // Weights of sigma points
   Eigen::VectorXd weights_;
 
   // State dimension
   int n_x_;
+
+  int n_v_;
 
   // Augmented state dimension
   int n_aug_;
