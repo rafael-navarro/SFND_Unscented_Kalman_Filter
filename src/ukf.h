@@ -4,6 +4,9 @@
 #include "Eigen/Dense"
 #include "measurement_package.h"
 
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
+
 class UKF {
  public:
   /**
@@ -46,10 +49,17 @@ class UKF {
    * @param Xsig_out Sigma points matrix
    */
 
-  void UKF::GenerateSigmaPoints(VectorXd x, MatrixXd P, double lambda, MatrixXd* x_sig_out);
+  void GenerateSigmaPoints(VectorXd x, MatrixXd P, double lambda, MatrixXd* x_sig_out);
   void AugmentedSigmaPoints(MatrixXd* x_sig_aug_out);
   void SigmaPointPrediction(MatrixXd x_sig_aug, double delta_t, MatrixXd* x_sig_out);
-  void PredictMeanAndCovariance(MatrixXd x_sig_pred, double lambda, VectorXd* x_out, MatrixXd* P_out); 
+  void PredictMeanAndCovariance(MatrixXd x_sig_pred, int n_x, double lambda, VectorXd* x_out, MatrixXd* P_out); 
+  void PredictMeasureMeanAndCovariance(MatrixXd x_sig_pred, int n_x, double lambda, VectorXd* x_out, MatrixXd* P_out);
+
+  void PredictRadarMeasurement(MatrixXd Xsig_pred, VectorXd* z_out, MatrixXd* S_out, MatrixXd *Zsig);
+  void PredictLidarMeasurement(MatrixXd Xsig_pred, VectorXd* z_out, MatrixXd* S_out, MatrixXd *Zsig);
+
+  void UpdateState(VectorXd z, MatrixXd S, MatrixXd Zsig, VectorXd z_pred); //, VectorXd* x_out, MatrixXd* P_out);
+
 
   // initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
@@ -67,6 +77,10 @@ class UKF {
   Eigen::MatrixXd P_;
 
   Eigen::MatrixXd V_;
+
+
+  Eigen::MatrixXd V_rad_;
+  Eigen::MatrixXd V_lid_;
 
   // predicted sigma points matrix
   Eigen::MatrixXd Xsig_pred_;
@@ -102,6 +116,9 @@ class UKF {
   int n_x_;
 
   int n_v_;
+
+  int n_radar_;
+  int n_lidar_;
 
   // Augmented state dimension
   int n_aug_;
