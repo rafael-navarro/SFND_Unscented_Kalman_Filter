@@ -48,7 +48,6 @@ class UKF {
    * Generate sigma points given current state
    * @param Xsig_out Sigma points matrix
    */
-
   void GenerateSigmaPoints(VectorXd x, MatrixXd P, double lambda, MatrixXd* x_sig_out);
   void AugmentedSigmaPoints(MatrixXd* x_sig_aug_out);
   void SigmaPointPrediction(MatrixXd x_sig_aug, double delta_t, MatrixXd* x_sig_out);
@@ -58,7 +57,7 @@ class UKF {
   void PredictRadarMeasurement(MatrixXd Xsig_pred, VectorXd* z_out, MatrixXd* S_out, MatrixXd *Zsig);
   void PredictLidarMeasurement(MatrixXd Xsig_pred, VectorXd* z_out, MatrixXd* S_out, MatrixXd *Zsig);
 
-  void UpdateState(VectorXd z, MatrixXd S, MatrixXd Zsig, VectorXd z_pred); //, VectorXd* x_out, MatrixXd* P_out);
+  void UpdateState(VectorXd z, MatrixXd S, MatrixXd Zsig, VectorXd z_pred);
 
 
   // initially set to false, set to true in first call of ProcessMeasurement
@@ -76,9 +75,10 @@ class UKF {
   // state covariance matrix
   Eigen::MatrixXd P_;
 
+  //Process noise covariance
   Eigen::MatrixXd V_;
 
-
+  //Measurement noise Radar/Lidar covariance
   Eigen::MatrixXd V_rad_;
   Eigen::MatrixXd V_lid_;
 
