@@ -77,12 +77,15 @@ UKF::UKF() {
         0,
         0;
 
+
+std_laspx_ = 0.15;
+
   // state uncertainty covariance matrix
-  P_ << .1, 0, 0, 0, 0,
-        0, .1, 0, 0, 0,
-        0, 0, .1, 0, 0,
-        0, 0, 0, .1, 0,
-        0, 0, 0, 0, .1;
+  P_ << std_laspx_*std_laspx_, 0, 0, 0, 0,
+        0, std_laspy_*std_laspy_, 0, 0, 0,
+        0, 0, std_radr_*std_radr_, 0, 0,
+        0, 0, 0, std_radphi_*std_radphi_, 0,
+        0, 0, 0, 0, std_radrd_*std_radrd_;
 
   //Radar init
   n_radar_ = 3;
